@@ -1,0 +1,32 @@
+﻿@model BilSalg.Models.SalesViewModel
+
+@{
+    
+    ViewBag.Title = "Your Sales";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="sales row">
+
+    @{
+        foreach (BilSalg.Models.Sale sale in Model.MySale)
+        {
+            string link = "Edit/" + sale.Id;
+            <div class="sale col-md-3">
+                <ul>
+                    <li>Make: @sale.Make</li>
+                    <li>Model: @sale.Variant</li>
+                    <li>Year: @sale.Year</li>
+                    <li>Engine: @sale.Engine</li>
+                    <li>Mileage (kilometers): @sale.Mileage</li>
+                    <li>Name: @sale.Name</li>
+                    <li>Phone: @sale.Phone</li>
+                    <li>Price (in dkk): @sale.Price</li>
+                    <li><a href="@link">Edit</a></li>
+                </ul>
+            </div>
+        }
+    }
+
+</div>
