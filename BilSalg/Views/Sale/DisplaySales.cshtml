@@ -12,8 +12,11 @@
     @{
         foreach (BilSalg.Models.Sale sale in Model.MySale)
         {
-            string link = "Edit/" + sale.Id;
+            string editLink = "Edit/" + sale.Id;
+            string removeLink = "Remove/" + sale.Id;
             <div class="sale col-md-3">
+                <img class="resize" src="@sale.ImageURL" alt="A picture of the car for sale"/>
+
                 <ul>
                     <li>Model: @sale.Variant</li>
                     <li>Year: @sale.Year</li>
@@ -22,7 +25,7 @@
                     <li>Name: @sale.Name</li>
                     <li>Phone: @sale.Phone</li>
                     <li>Price (in dkk): @sale.Price</li>
-                    <li><a href="@link">Edit</a></li>
+                    <li><a href="@editLink">Edit</a>&nbsp;<a href="@removeLink">Remove</a></li>
                 </ul>
             </div>
         }

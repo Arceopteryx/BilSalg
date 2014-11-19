@@ -1,0 +1,32 @@
+﻿@model BilSalg.Models.RemoveViewModel
+@{
+    ViewBag.Title = "Remove";
+}
+
+<h2>Remove</h2>
+
+<h3 class="text-danger">Are you sure you wish to remove this car?</h3>
+
+@using (Html.BeginForm())
+{
+    <div class="form-horizontal">
+        <h4>Sale</h4>
+        <hr />
+
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.yesNo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.CheckBoxFor(model => model.yesNo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.yesNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Remove" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}

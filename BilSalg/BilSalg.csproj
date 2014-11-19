@@ -169,6 +169,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\RemoveViewModel.cs" />
     <Compile Include="Models\Sale.cs" />
     <Compile Include="Models\SalesViewModel.cs" />
     <Compile Include="Models\SaleViewModel.cs" />
@@ -239,6 +240,8 @@
     <Content Include="Views\Sale\Error.cshtml" />
     <Content Include="Views\Sale\Edit.cshtml" />
     <Content Include="Views\Sale\CarsForSale.cshtml" />
+    <Content Include="Views\Sale\Remove.cshtml" />
+    <Content Include="Views\Sale\Removed.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

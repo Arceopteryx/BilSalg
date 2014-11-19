@@ -32,6 +32,11 @@ namespace BilSalg.Controllers
                 return View();
             }
 
+            if(model.ImageURL == null)
+            {
+                model.ImageURL = "http://placehold.it/250x250";
+            }
+
             model.ApplicationUserId = User.Identity.GetUserId();
 
             var db = new ApplicationDbContext();
@@ -94,6 +99,27 @@ namespace BilSalg.Controllers
 
                 return View(saleViewModel);
             }
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult Remove(int id)
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult Remove(RemoveViewModel model)
+        {
+            var db = new ApplicationDbContext();
+
+            Sale sale = db.Sales.Single(x => x.Id == model.Id);
+
+            db.Sales.Remove(sale);
+            db.SaveChanges();
+
+            return View("Removed");
         }
 
         [Authorize]

@@ -12,6 +12,8 @@
         foreach (BilSalg.Models.Sale sale in Model.MySale)
         {
             <div class="sale col-md-3">
+                <img class="resize" src="@sale.ImageURL" alt="A picture of the car for sale" />
+
                 <ul>
                     <li>Model: @sale.Variant</li>
                     <li>Year: @sale.Year</li>
