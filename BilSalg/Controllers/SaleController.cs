@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using BilSalg.Repositories;
 
 namespace BilSalg.Controllers
 {
@@ -39,9 +40,7 @@ namespace BilSalg.Controllers
 
             model.ApplicationUserId = User.Identity.GetUserId();
 
-            var db = new ApplicationDbContext();
-            db.Sales.Add(model);
-            db.SaveChanges();
+            SaleRepository.SaveSale(model);
 
             return RedirectToAction("Thanks");
         }
@@ -51,60 +50,27 @@ namespace BilSalg.Controllers
         [HttpGet]
         public ActionResult DisplaySales()
         {
-            string userid = User.Identity.GetUserId();
-
-            var db = new ApplicationDbContext();
-
-            IEnumerable<Sale> sales = from sale in db.Sales
-                                      where sale.ApplicationUserId == userid
-                                      select sale;
-
-            var saleViewModel = new SalesViewModel(sales);
-
-            return View(saleViewModel);
+            return View(SaleRepository.DisplayUserSales(User.Identity.GetUserId()));
         }
 
         //This is gonna display all the cars for sale
         [HttpGet]
         public ActionResult CarsForSale()
         {
-            //THIS NEEDS A MASSIVE SEPERATION OF CONCERNS FIX
-            //REFACTOR
-            //REFACTOR!!!!!!
-            //REFACTOR!!!!!!!!!!!!!!!!!!!!!
-
-            string userid = User.Identity.GetUserId();
-
-            if (userid != null)
-            {
-                
-                var db = new ApplicationDbContext();
-
-                IEnumerable<Sale> sales = from sale in db.Sales
-                                          where sale.ApplicationUserId != userid
-                                          select sale;
-
-                var saleViewModel = new SalesViewModel(sales);
-
-                return View(saleViewModel);
-            }
-            else
-            {
-                var db = new ApplicationDbContext();
-
-                IEnumerable<Sale> sales = from sale in db.Sales
-                                          select sale;
-
-                var saleViewModel = new SalesViewModel(sales);
-
-                return View(saleViewModel);
-            }
+            return View(SaleRepository.DisplayCarsForSale());
         }
 
         [Authorize]
         [HttpGet]
         public ActionResult Remove(int id)
         {
+            Sale sale = SaleRepository.FetchSale(id);
+
+            if (User.Identity.GetUserId() != sale.ApplicationUserId)
+            {
+                return View("Error");
+            }
+
             return View();
         }
 
@@ -112,12 +78,7 @@ namespace BilSalg.Controllers
         [HttpPost]
         public ActionResult Remove(RemoveViewModel model)
         {
-            var db = new ApplicationDbContext();
-
-            Sale sale = db.Sales.Single(x => x.Id == model.Id);
-
-            db.Sales.Remove(sale);
-            db.SaveChanges();
+            SaleRepository.RemoveSale(model.Id);
 
             return View("Removed");
         }
@@ -126,15 +87,11 @@ namespace BilSalg.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            var db = new ApplicationDbContext();
+            Sale sale = SaleRepository.FetchSale(id);
 
-            Sale sale = db.Sales.Single(x => x.Id == id);
-
-            string userid = User.Identity.GetUserId();
-
-            if(userid != sale.ApplicationUserId)
+            if(User.Identity.GetUserId() != sale.ApplicationUserId)
             {
-                Error();
+                return View("Error");
             }
 
             return View(sale);
@@ -146,35 +103,13 @@ namespace BilSalg.Controllers
         {
             if (!ModelState.IsValid)
             {
-                Error();
+                return View("Error");
             }
 
-            var db = new ApplicationDbContext();
-
-            Sale sale = db.Sales.Single(x => x.Id == model.Id);
-
-            //sale = model did not work!!
-            //This is not very good code. There must be a better fix.
-            //I'll leave this as is, and change it if I find a solution
-
-            sale.Variant = model.Variant;
-            sale.Year = model.Year;
-            sale.Engine = model.Engine;
-            sale.Mileage = model.Mileage;
-            sale.FirstName = model.FirstName;
-            sale.LastName = model.LastName;
-            sale.Phone = model.Phone;
-            sale.Price = model.Price;
-
-            db.SaveChanges();
+            SaleRepository.EditSale(model);
 
             return View("Thanks");
 
-        }
-
-        public ActionResult Error()
-        {
-            return View();
         }
 
         public ActionResult Thanks()

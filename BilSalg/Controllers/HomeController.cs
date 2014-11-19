@@ -15,7 +15,7 @@ namespace BilSalg.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "We are The CR-X Shoppe!";
 
             return View();
         }
