@@ -1,18 +1,16 @@
 ﻿@model BilSalg.Models.SalesViewModel
 
 @{
-    
-    ViewBag.Title = "Your Sales";
+    ViewBag.Title = "CarsForSale";
 }
 
-<h2>@ViewBag.Title</h2>
+<h2>Cars For Sale</h2>
 
 <div class="sales row">
 
     @{
         foreach (BilSalg.Models.Sale sale in Model.MySale)
         {
-            string link = "Edit/" + sale.Id;
             <div class="sale col-md-3">
                 <ul>
                     <li>Model: @sale.Variant</li>
@@ -22,7 +20,6 @@
                     <li>Name: @sale.Name</li>
                     <li>Phone: @sale.Phone</li>
                     <li>Price (in dkk): @sale.Price</li>
-                    <li><a href="@link">Edit</a></li>
                 </ul>
             </div>
         }

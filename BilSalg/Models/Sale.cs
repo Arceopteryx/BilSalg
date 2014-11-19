@@ -10,11 +10,9 @@ namespace BilSalg.Models
     {
         public int Id { get; set; }
 
-        [Required]
-        public string Make { get; set; }
-
         //I named this Variant instead of Model, as it make the form submission break
         [Required]
+        [RegularExpression(@"^.*(CRX|CR-X)+.*$", ErrorMessage = "Model name must contain CRX or CR-X")]
         [Display(Name = "Model")]
         public string Variant { get; set; }
 

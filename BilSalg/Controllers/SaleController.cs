@@ -16,11 +16,6 @@ namespace BilSalg.Controllers
             return View();
         }
 
-        public ActionResult Details()
-        {
-            return View();
-        }
-
         [Authorize]
         [HttpGet]
         public ActionResult Create()
@@ -46,6 +41,7 @@ namespace BilSalg.Controllers
             return RedirectToAction("Thanks");
         }
 
+        //This displays the cars for sale, that belongs to the user that made the sales
         [Authorize]
         [HttpGet]
         public ActionResult DisplaySales()
@@ -61,6 +57,43 @@ namespace BilSalg.Controllers
             var saleViewModel = new SalesViewModel(sales);
 
             return View(saleViewModel);
+        }
+
+        //This is gonna display all the cars for sale
+        [HttpGet]
+        public ActionResult CarsForSale()
+        {
+            //THIS NEEDS A MASSIVE SEPERATION OF CONCERNS FIX
+            //REFACTOR
+            //REFACTOR!!!!!!
+            //REFACTOR!!!!!!!!!!!!!!!!!!!!!
+
+            string userid = User.Identity.GetUserId();
+
+            if (userid != null)
+            {
+                
+                var db = new ApplicationDbContext();
+
+                IEnumerable<Sale> sales = from sale in db.Sales
+                                          where sale.ApplicationUserId != userid
+                                          select sale;
+
+                var saleViewModel = new SalesViewModel(sales);
+
+                return View(saleViewModel);
+            }
+            else
+            {
+                var db = new ApplicationDbContext();
+
+                IEnumerable<Sale> sales = from sale in db.Sales
+                                          select sale;
+
+                var saleViewModel = new SalesViewModel(sales);
+
+                return View(saleViewModel);
+            }
         }
 
         [Authorize]
@@ -98,7 +131,6 @@ namespace BilSalg.Controllers
             //This is not very good code. There must be a better fix.
             //I'll leave this as is, and change it if I find a solution
 
-            sale.Make = model.Make;
             sale.Variant = model.Variant;
             sale.Year = model.Year;
             sale.Engine = model.Engine;
